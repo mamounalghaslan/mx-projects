@@ -20,7 +20,10 @@ def detect_objects():
         # convert to PIL image
         image = Image.open(image)
 
-        results = model(image)
+        # resize image
+        image = image.resize((640, 640))
+
+        results = model.predict(image, classes=[0, 1])
 
         for r in results:
             im_array = r.plot()  # plot a BGR numpy array of predictions
