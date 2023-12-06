@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLOv8 Photo Upload</title>
+</head>
+<body>
+    <h1>YOLOv8 Photo Upload</h1>
+    <input type="file" id="photoInput" accept="image/*">
+    <button onclick="uploadPhoto()">Upload Photo</button>
+    <img id="uploadedPhoto" style="display:none;" width="640" height="640">
+    <h2>Resulting Image</h2>
+    <img id="resultingImage" style="display:none;" width="640" height="640">
+
+    <script>
+        function uploadPhoto() {
+            var input = document.getElementById('photoInput');
+            var file = input.files[0];
+
+            if (file) {
+                // Display the uploaded photo
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('uploadedPhoto').src = e.target.result;
+                    document.getElementById('uploadedPhoto').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                // Send the uploaded photo to the Flask API for prediction
+                sendToAPI(file);
+            } else {
+                alert('Please select a photo to upload.');
+            }
+        }
+
+        function sendToAPI(file) {
+            var API_ENDPOINT = 'http://127.0.0.1:5000/detect';
+
+            // Create a FormData object to send the image file
+            var formData = new FormData();
+            formData.append('image', file);
+
+            // Send a POST request to the Flask API
+            fetch(API_ENDPOINT, {
+                method: 'POST',
+                body: formData
+            })
+                // the response is an image file
+            .then(response => response.blob())
+            .then(data => {
+                // Display the resulting image
+                document.getElementById('resultingImage').src = URL.createObjectURL(data);
+                document.getElementById('resultingImage').style.display = 'block';
+            })
+            .catch(error => console.error('Error sending photo to API:', error));
+        }
+    </script>
+</body>
+</html>

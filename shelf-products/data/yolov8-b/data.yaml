@@ -1,0 +1,13 @@
+train: /notebooks/datasets/yolov8-b/train/images
+val: /notebooks/datasets/yolov8-b/test/images
+test: /notebooks/datasets/yolov8-b/test/images
+
+nc: 3
+names: ['MIS', 'OOS', 'Product']
+
+roboflow:
+  workspace: mx-project
+  project: shelf-monitoring-uga7l
+  version: 14
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/mx-project/shelf-monitoring-uga7l/dataset/14
