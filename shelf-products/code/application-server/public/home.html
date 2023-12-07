@@ -9,11 +9,17 @@
 
 <body>
 <div class="row">
+    <div class="col-12" style="text-align:center; margin-bottom: 3rem">
+        <h1 id="errorMessage"></h1>
+    </div>
+</div>
+<div class="row">
     <!-- center everything inside the div -->
     <div class="col-12" style="text-align:center; margin-bottom: 3rem">
         <h1>Out-of-Stock and Misplaced item detector</h1>
         <input type="file" id="photoInput" accept="image/*">
         <button onclick="uploadPhoto()">Upload Photo</button>
+        <button onclick="capturePhoto()">Capture Photo</button> <!-- Add Capture Photo button -->
     </div>
 </div>
     <div class="row">
@@ -48,8 +54,44 @@
             }
         }
 
+        function capturePhoto() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    var video = document.createElement('video');
+                    document.body.appendChild(video);
+                    video.srcObject = stream;
+                    video.play();
+
+                    // Capture photo after 3 seconds (adjust as needed)
+                    setTimeout(function () {
+                        var canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        var context = canvas.getContext('2d');
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // Convert the canvas content to a Blob (image file)
+                        canvas.toBlob(function (blob) {
+                            // Display the captured photo
+                            document.getElementById('uploadedPhoto').src = URL.createObjectURL(blob);
+                            document.getElementById('uploadedPhoto').style.display = 'block';
+
+                            // Send the captured photo to the Flask API for prediction
+                            sendToAPI(blob);
+                        }, 'image/jpeg');
+
+                        // Stop the video stream
+                        stream.getTracks().forEach(track => track.stop());
+                        video.remove();
+                    }, 3000); // Adjust capture time as needed
+                })
+                .catch(function (error) {
+                    console.error('Error accessing webcam:', error);
+                });
+        }
+
         function sendToAPI(file) {
-            var API_ENDPOINT = 'http://127.0.0.1:5000/detect';
+            var API_ENDPOINT = 'http://192.168.5.144:5000/detect';
 
             // Create a FormData object to send the image file
             var formData = new FormData();
@@ -67,7 +109,10 @@
                 document.getElementById('resultingImage').src = URL.createObjectURL(data);
                 document.getElementById('resultingImage').style.display = 'block';
             })
-            .catch(error => console.error('Error sending photo to API:', error));
+            .catch(error => {
+                console.error('Error sending photo to API:', error);
+                document.getElementById('errorMessage').innerHTML = 'Error sending photo to API' + error;
+            });
         }
     </script>
 </body>

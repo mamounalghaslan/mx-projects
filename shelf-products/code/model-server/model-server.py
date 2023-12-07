@@ -5,7 +5,7 @@ from ultralytics import YOLO
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/detect": {"origins": "*"}})
 
 # Load your YOLOv8
 model = YOLO('../yolov8/train6/weights/best.pt')
@@ -13,6 +13,7 @@ model = YOLO('../yolov8/train6/weights/best.pt')
 
 @app.route('/detect', methods=['POST'])
 def detect_objects():
+    print('request received')
     try:
         # image is in form-data
         image = request.files['image']
@@ -30,10 +31,6 @@ def detect_objects():
             im = Image.fromarray(im_array[..., ::-1])  # RGB PIL image
             im.save('results.jpg')  # save image
 
-        response = jsonify({'result': 'success'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-
-        # return the image using send_file and allow CORS
         return send_file('results.jpg', mimetype='image/jpg')
 
     except Exception as e:
@@ -41,7 +38,7 @@ def detect_objects():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     # print the local address to access the server
 
 
