@@ -1,0 +1,15 @@
+path: /notebooks/yolov5/Shelf-Monitoring-A
+
+train: /notebooks/yolov5/Shelf-Monitoring-A/train/images
+val: /notebooks/yolov5/Shelf-Monitoring-A/valid/images
+test: /notebooks/yolov5/Shelf-Monitoring-A/test/images
+
+nc: 3
+names: ['MIS', 'OOS', 'Product']
+
+roboflow:
+  workspace: mx-project
+  project: shelf-monitoring-uga7l
+  version: 11
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/mx-project/shelf-monitoring-uga7l/dataset/11
