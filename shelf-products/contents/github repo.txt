@@ -1,0 +1,5 @@
+https://github.com/mamounalghaslan/mx-projects/tree/e5be0becbbcbd4a242774700735615638fbb36cf/shelf-products
+
+Clone the entire `/shelf-products` folder with it's contents.
+
+The README.md file in the folder details the contents.
