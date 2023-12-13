@@ -34,7 +34,10 @@
     </div>
 
     <script>
+        // uploads the photo to the HTML page and displays it
         function uploadPhoto() {
+
+            // Get the uploaded photo
             var input = document.getElementById('photoInput');
             var file = input.files[0];
 
@@ -45,6 +48,7 @@
                     document.getElementById('uploadedPhoto').src = e.target.result;
                     document.getElementById('uploadedPhoto').style.display = 'block';
                 };
+
                 reader.readAsDataURL(file);
 
                 // Send the uploaded photo to the Flask API for prediction
@@ -54,6 +58,9 @@
             }
         }
 
+
+        // The following code gets the webcam stream and captures a photo after 3 seconds
+        // This has been tested on a Microsoft Surface Laptop - mobile version is not supported
         function capturePhoto() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function (stream) {
@@ -90,11 +97,12 @@
                 });
         }
 
+        // Sends the photo to the Flask API for prediction
         function sendToAPI(file) {
             var API_ENDPOINT = 'http://127.0.0.1:5000/detect';
 
-            // To access the Flask API from a different computer on the same network, use the following API endpoint instead
-            // var API_ENDPOINT = 'http://192.168.5.144:5000/detect';
+            // To access the Flask API from a different computer on the same network, use the actual local IP address.
+            // var API_ENDPOINT = 'http://192.168.1.2:5000/detect';
 
             // Create a FormData object to send the image file
             var formData = new FormData();

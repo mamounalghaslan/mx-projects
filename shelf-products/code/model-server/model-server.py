@@ -7,10 +7,11 @@ from ultralytics import YOLO
 app = Flask(__name__)
 CORS(app, resources={r"/detect": {"origins": "*"}})
 
-# Load your YOLOv8
+# Load the YOLOv8 - make sure to adjust the path accordingly
 model = YOLO('../model-training/yolov8/train6/weights/best.pt')
 
 
+# POST request - detect objects in image
 @app.route('/detect', methods=['POST'])
 def detect_objects():
     print('request received')
@@ -24,6 +25,7 @@ def detect_objects():
         # resize image
         image = image.resize((640, 640))
 
+        # detect objects
         results = model.predict(image, classes=[0, 1])
 
         for r in results:
@@ -37,6 +39,7 @@ def detect_objects():
         return jsonify({'error': str(e)})
 
 
+# Run the server on local machine
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
     # print the local address to access the server
