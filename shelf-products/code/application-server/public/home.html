@@ -93,6 +93,9 @@
         function sendToAPI(file) {
             var API_ENDPOINT = 'http://127.0.0.1:5000/detect';
 
+            // To access the Flask API from a different computer on the same network, use the following API endpoint instead
+            // var API_ENDPOINT = 'http://192.168.5.144:5000/detect';
+
             // Create a FormData object to send the image file
             var formData = new FormData();
             formData.append('image', file);
