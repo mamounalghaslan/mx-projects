@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/detect": {"origins": "*"}})
 
 # Load your YOLOv8
-model = YOLO('../yolov8/train6/weights/best.pt')
+model = YOLO('../model-training/yolov8/train6/weights/best.pt')
 
 
 @app.route('/detect', methods=['POST'])
