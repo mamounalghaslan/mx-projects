@@ -1,0 +1,11 @@
+sudo apt install unzip
+
+pip install roboflow
+
+pip install ultralytics
+
+curl -L "https://universe.roboflow.com/ds/CODE-HERE" > roboflow.zip; unzip roboflow.zip; rm roboflow.zip
+
+export MKL_SERVICE_FORCE_INTEL=1
+
+yolo detect train data=data.yaml model=yolov8n.yaml pretrained=yolov8n.pt epochs=200 imgsz=640 device=0,1
